@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"sort"
 )
 
@@ -20,6 +22,12 @@ func main() {
 	delete(ages, "alice")        //删除指定key
 	ages["charlie"]++
 	fmt.Println(ages["charlie"])
+
+	_, ok := ages["bob"]
+	if !ok {
+		/* "bob" is not a key in this map; age == 0. */
+		fmt.Println("bob is not a key in this map")
+	}
 
 	/**
 	map中的元素并不是变量，不能对map元素进行取址操作
@@ -42,6 +50,8 @@ func main() {
 	fmt.Println("========有序遍历===============")
 	foreachByName(sorces)
 
+	printLine()
+
 }
 
 /**
@@ -62,5 +72,36 @@ func foreachByName(sorces map[string]int) {
 	sort.Strings(names)
 	for _, name := range names {
 		fmt.Printf("%s\t%d\n", name, sorces[name])
+	}
+}
+
+/**
+比较两个map是否相等
+*/
+func equal(x, y map[string]int) bool {
+	if len(x) != len(y) {
+		return false
+	}
+	for k, xv := range x {
+		if yv, ok := y[k]; !ok || yv != xv {
+			return false
+		}
+	}
+	return true
+}
+
+func printLine() {
+	seen := make(map[string]bool)
+	input := bufio.NewScanner(os.Stdin)
+	for input.Scan() {
+		line := input.Text()
+		if !seen[line] {
+			seen[line] = true
+			fmt.Println(line)
+		}
+	}
+	if err := input.Err(); err != nil {
+		fmt.Fprintf(os.Stderr, "dedup:%v\n", err)
+		os.Exit(1)
 	}
 }
