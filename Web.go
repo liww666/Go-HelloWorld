@@ -6,17 +6,16 @@ import (
 	"net/http"
 )
 
-func main(){
+func main() {
 	var s int
 	fmt.Println(s)
-	http.HandleFunc("/",handler2)
-	log.Fatal(http.ListenAndServe("localhost:8000",nil))
+	http.HandleFunc("/", handler1)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
-func handler1(w http.ResponseWriter,r *http.Request){
-	fmt.Fprintf(w,"URL.Path=%q\n",r.URL.Path)
+func handler1(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "URL.Path=%q\n", r.URL.Path)
 }
-
 
 func handler2(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s %s %s\n", r.Method, r.URL, r.Proto)
